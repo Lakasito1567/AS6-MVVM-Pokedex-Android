@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/pokedexFragment"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    app:startDestination="@id/pokedexFragment2">
     <fragment
-        android:id="@+id/pokedexFragment"
-        android:name="com.example.pokemon.pokedexFragment"
+        android:id="@+id/pokedexFragment2"
+        android:name="com.example.pokemon.PokedexFragment"
         android:label="fragment_pokedex"
         tools:layout="@layout/fragment_pokedex" >
         <action
-            android:id="@+id/action_pokedexFragment_to_detailsFragment4"
-            app:destination="@id/detailsFragment4" />
+            android:id="@+id/action_pokedexFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment5" />
     </fragment>
     <fragment
-        android:id="@+id/detailsFragment4"
-        android:name="com.example.pokemon.detailsFragment"
+        android:id="@+id/detailsFragment5"
+        android:name="com.example.pokemon.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
 </navigation>
+
