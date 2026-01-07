@@ -32,6 +32,9 @@ class PokedexFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        binding.recycler.layoutManager =
+            androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+
         adapter = PokemonAdapter(
             onClick = { pokemon ->
                 viewModel.select(pokemon)
@@ -44,7 +47,7 @@ class PokedexFragment : Fragment() {
             }
         )
 
-            binding.recycler.adapter = adapter
+        binding.recycler.adapter = adapter
 
         viewModel.pokemons.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
@@ -52,14 +55,13 @@ class PokedexFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(
-                0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
             ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
-                ): Boolean = false
+                ) = false
 
                 override fun onSwiped(
                     viewHolder: RecyclerView.ViewHolder,
@@ -71,7 +73,6 @@ class PokedexFragment : Fragment() {
                 }
             }
         )
-
         itemTouchHelper.attachToRecyclerView(binding.recycler)
     }
 

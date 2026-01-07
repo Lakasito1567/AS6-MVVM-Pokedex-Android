@@ -23,8 +23,11 @@ class PokemonRepository {
     fun getById(id: Int): Pokemon? = initialList.find { it.id == id }
 
     fun setFavorite(id: Int, fav: Boolean) {
-        val p = initialList.find { it.id == id }
-        p?.isFavorite = fav
+        val updated = initialList.map { p ->
+            if (p.id == id) p.copy(isFavorite = fav) else p
+        }
+        initialList.clear()
+        initialList.addAll(updated)
         _pokemons.value = initialList.toList()
     }
 }
