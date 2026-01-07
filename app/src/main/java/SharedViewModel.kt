@@ -7,24 +7,28 @@ class SharedViewModel : ViewModel() {
 
     val pokemons: LiveData<List<Pokemon>> = repository.pokemons
 
-    private val _selected = MutableLiveData<Pokemon?>()
+    private val _selected = MediatorLiveData<Pokemon?>()
     val selected: LiveData<Pokemon?> = _selected
 
+    val favoritePokemons = MediatorLiveData<List<Pokemon>>()
+
     init {
-        loadPokemonsFromApi()
+        favoritePokemons.addSource(pokemons) { list ->
+            favoritePokemons.value = list.filter { it.isFavorite }
+        }
+
+        fetchPokemons()
     }
 
-    fun loadPokemonsFromApi(limit: Int = 30) {
+    private fun fetchPokemons() {
         viewModelScope.launch {
-            try {
-                repository.fetchFromApi(limit)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            repository.fetchFromApi()
         }
     }
 
-    fun select(p: Pokemon) { _selected.value = p }
+    fun select(p: Pokemon) {
+        _selected.value = p
+    }
 
     fun delete(p: Pokemon) {
         repository.delete(p)

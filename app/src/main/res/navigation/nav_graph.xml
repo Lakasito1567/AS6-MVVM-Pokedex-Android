@@ -12,11 +12,23 @@
         <action
             android:id="@+id/action_pokedexFragment_to_detailsFragment"
             app:destination="@id/detailsFragment5" />
+        <action
+            android:id="@+id/action_pokedexFragment2_to_favPokemonFragment"
+            app:destination="@id/favPokemonFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment5"
         android:name="com.example.pokemon.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/favPokemonFragment"
+        android:name="com.example.pokemon.FavPokemonFragment"
+        android:label="fragment_fav_pokemon"
+        tools:layout="@layout/fragment_fav_pokemon" >
+        <action
+            android:id="@+id/action_favPokemonFragment_to_detailsFragment5"
+            app:destination="@id/detailsFragment5" />
+    </fragment>
 </navigation>
 
