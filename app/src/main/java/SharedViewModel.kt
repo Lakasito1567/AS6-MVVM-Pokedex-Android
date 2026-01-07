@@ -1,6 +1,5 @@
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.launch
 
 class SharedViewModel : ViewModel() {
 
@@ -11,9 +10,21 @@ class SharedViewModel : ViewModel() {
     private val _selected = MutableLiveData<Pokemon?>()
     val selected: LiveData<Pokemon?> = _selected
 
-    fun select(p: Pokemon) {
-        _selected.value = p
+    init {
+        loadPokemonsFromApi()
     }
+
+    fun loadPokemonsFromApi(limit: Int = 30) {
+        viewModelScope.launch {
+            try {
+                repository.fetchFromApi(limit)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun select(p: Pokemon) { _selected.value = p }
 
     fun delete(p: Pokemon) {
         repository.delete(p)
