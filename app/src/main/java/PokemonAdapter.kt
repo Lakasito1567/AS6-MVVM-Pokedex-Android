@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemon.databinding.ItemPokemonBinding
+import com.bumptech.glide.Glide
 
 class PokemonAdapter(
     private val onClick: (Pokemon) -> Unit,
@@ -25,6 +26,11 @@ class PokemonAdapter(
         fun bind(p: Pokemon) {
             binding.tvName.text = p.name
             binding.tvType.text = p.type
+            Glide.with(binding.ivImage.context)
+                .load(p.imageUrl)
+                .centerCrop()
+                .into(binding.ivImage)
+
             binding.ivStar.setImageResource(
                 if (p.isFavorite) android.R.drawable.btn_star_big_on
                 else android.R.drawable.btn_star_big_off

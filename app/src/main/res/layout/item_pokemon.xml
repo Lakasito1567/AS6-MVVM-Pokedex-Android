@@ -6,16 +6,25 @@
     android:layout_height="wrap_content"
     android:padding="12dp">
 
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:contentDescription="pokemon image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <TextView
         android:id="@+id/tvName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Pikachu"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivImage"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ivStar"
-        />
+        android:layout_marginStart="8dp"/>
 
     <TextView
         android:id="@+id/tvType"
@@ -23,10 +32,10 @@
         android:layout_height="wrap_content"
         android:text="Electric"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivImage"
         app:layout_constraintTop_toBottomOf="@id/tvName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivStar"/>
+        app:layout_constraintEnd_toStartOf="@+id/ivStar"
+        android:layout_marginStart="8dp"/>
 
     <ImageView
         android:id="@+id/ivStar"
@@ -37,5 +46,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
