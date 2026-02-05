@@ -5,5 +5,5 @@ data class Pokemon(
     val type: String = "",
     val description: String = "",
     val imageUrl: String = "",
-    val isFavorite: Boolean = false
+    val isDeleted: Boolean = false
 )

@@ -9,11 +9,16 @@ class PokemonRepository {
     val pokemons: LiveData<List<Pokemon>> = _pokemons
 
     private val internalList = mutableListOf<Pokemon>()
+    private var offset = 0
+    private val limit = 20
+    var isLoading = false
 
-    suspend fun fetchFromApi(limit: Int = 50) {
+    suspend fun fetchFromApi() {
+        if (isLoading) return
+        isLoading = true
         try {
             val api = RetrofitClient.api
-            val listResponse = api.getPokemonList(limit)
+            val listResponse = api.getPokemonList(limit = limit, offset = offset)
 
             val details = coroutineScope {
                 listResponse.results.map { res ->
@@ -29,17 +34,25 @@ class PokemonRepository {
                     type = types,
                     description = "",
                     imageUrl = d.sprites.front_default ?: "",
-                    isFavorite = false
+                    isDeleted = false
                 )
             }
 
-            internalList.clear()
             internalList.addAll(mapped)
             _pokemons.postValue(internalList.toList())
+
+            offset += limit
         } catch (e: Exception) {
             e.printStackTrace()
-            _pokemons.postValue(emptyList())
+        } finally {
+            isLoading = false
         }
+    }
+
+    fun resetPagination() {
+        offset = 0
+        internalList.clear()
+        _pokemons.value = emptyList()
     }
 
     fun delete(pokemon: Pokemon) {
@@ -49,10 +62,16 @@ class PokemonRepository {
 
     fun getById(id: Int): Pokemon? = internalList.find { it.id == id }
 
-    fun setFavorite(id: Int, fav: Boolean) {
-        val updated = internalList.map { p -> if (p.id == id) p.copy(isFavorite = fav) else p }
-        internalList.clear()
-        internalList.addAll(updated)
-        _pokemons.value = internalList.toList()
+    fun moveToTrash(id: Int) {
+        _pokemons.value = _pokemons.value?.map {
+            if (it.id == id) it.copy(isDeleted = true) else it
+        }
     }
+
+    fun restoreFromTrash(id: Int) {
+        _pokemons.value = _pokemons.value?.map {
+            if (it.id == id) it.copy(isDeleted = false) else it
+        }
+    }
+
 }

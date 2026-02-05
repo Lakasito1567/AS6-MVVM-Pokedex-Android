@@ -29,12 +29,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        val current = navController.currentDestination?.id
+
         return when (item.itemId) {
+
             R.id.menu_favorites -> {
-                findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_pokedexFragment2_to_favPokemonFragment)
+                if (current != R.id.favPokemonFragment) {
+                    navController.navigate(R.id.favPokemonFragment)
+                } else {
+                    navController.popBackStack()
+                }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

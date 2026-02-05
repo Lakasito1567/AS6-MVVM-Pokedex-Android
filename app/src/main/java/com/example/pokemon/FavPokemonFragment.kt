@@ -11,9 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemon.databinding.FragmentFavPokemonBinding
-import com.example.pokemon.R
 
 class FavPokemonFragment : Fragment() {
 
@@ -34,48 +32,46 @@ class FavPokemonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // LayoutManager
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
 
+        // Adapter
         adapter = PokemonAdapter(
             onClick = { pokemon ->
-                viewModel.select(pokemon)
-                findNavController().navigate(
-                    R.id.action_favPokemonFragment_to_detailsFragment5
-                )
+                // Restaurar Pokémon al hacer click
+                viewModel.restoreFromTrash(pokemon)
             },
-            onStarClick = { pokemon ->
-                viewModel.setFavorite(pokemon.id, false)
-            }
+            onStarClick = { /* Puedes dejar vacío */ }
         )
-
         binding.recycler.adapter = adapter
 
-        viewModel.favoritePokemons.observe(viewLifecycleOwner) { list ->
+        // Observamos solo los Pokémon eliminados
+        viewModel.getDeletedPokemons().observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }
 
-        val itemTouchHelper = ItemTouchHelper(
+        // Swipe → borrar permanentemente
+        ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(
                 0,
                 ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
             ) {
                 override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ) = false
+                    recyclerView: androidx.recyclerview.widget.RecyclerView,
+                    viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder,
+                    target: androidx.recyclerview.widget.RecyclerView.ViewHolder
+                ): Boolean = false
 
                 override fun onSwiped(
-                    viewHolder: RecyclerView.ViewHolder,
+                    viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder,
                     direction: Int
                 ) {
-                    val pos = viewHolder.bindingAdapterPosition
-                    val pokemon = adapter.currentList[pos]
-                    viewModel.setFavorite(pokemon.id, false)
+                    val position = viewHolder.bindingAdapterPosition
+                    val pokemon = adapter.currentList[position]
+                    viewModel.delete(pokemon) // borra permanentemente
                 }
             }
-        )
-        itemTouchHelper.attachToRecyclerView(binding.recycler)
+        ).attachToRecyclerView(binding.recycler)
     }
 
     override fun onDestroyView() {

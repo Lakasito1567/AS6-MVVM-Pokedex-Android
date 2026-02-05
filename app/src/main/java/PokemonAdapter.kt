@@ -11,10 +11,10 @@ class PokemonAdapter(
     private val onStarClick: (Pokemon) -> Unit
 ) : ListAdapter<Pokemon, PokemonAdapter.PokemonViewHolder>(DiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        val binding = ItemPokemonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PokemonViewHolder(binding)
-    }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
+            val binding = ItemPokemonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return PokemonViewHolder(binding)
+        }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         holder.bind(getItem(position))
@@ -31,10 +31,6 @@ class PokemonAdapter(
                 .centerCrop()
                 .into(binding.ivImage)
 
-            binding.ivStar.setImageResource(
-                if (p.isFavorite) android.R.drawable.btn_star_big_on
-                else android.R.drawable.btn_star_big_off
-            )
 
             binding.root.setOnClickListener { onClick(p) }
             binding.ivStar.setOnClickListener { onStarClick(p) }
